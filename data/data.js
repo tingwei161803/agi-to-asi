@@ -34,6 +34,10 @@ window.SITE_PAGES = [
       cite: { en: "Alan Turing, Computing Machinery and Intelligence (1950)",
               zh: "圖靈,《計算機器與智慧》(1950)" }
     },
+    links: [
+      { href: "https://arxiv.org/abs/2606.12683", icon: "article",
+        label: { en: "Read the paper on arXiv", zh: "在 arXiv 閱讀原文" } }
+    ],
     stats: [
       { value: 4,  label: { en: "Pathways to ASI", zh: "通往 ASI 的路徑" } },
       { value: 7,  label: { en: "Potential bottlenecks", zh: "潛在瓶頸" } },

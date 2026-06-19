@@ -105,12 +105,19 @@
             '<p class="card__summary">' + esc(t(q.subtitle)) + "</p></a>";
         }).join("");
         var lead = t(p.lead) ? '<p class="hero__lead" data-item>' + esc(t(p.lead)) + "</p>" : "";
+        var links = (p.links || []).map(function (lnk) {
+          return '<a class="cta" data-item href="' + esc(lnk.href) + '" target="_blank" rel="noopener">' +
+            '<span class="material-symbols-rounded" aria-hidden="true">' + esc(lnk.icon || "open_in_new") + "</span>" +
+            "<span>" + esc(t(lnk.label)) + "</span>" +
+            '<span class="material-symbols-rounded cta__ext" aria-hidden="true">open_in_new</span></a>';
+        }).join("");
+        var linksRow = links ? '<div class="hero__actions">' + links + "</div>" : "";
         var epi = "";
         if (p.epigraph && t(p.epigraph.text)) {
           epi = '<figure class="epigraph" data-item><blockquote>' + esc(t(p.epigraph.text)) + "</blockquote>" +
             (t(p.epigraph.cite) ? '<figcaption>' + esc(t(p.epigraph.cite)) + "</figcaption>" : "") + "</figure>";
         }
-        return head(p) + lead +
+        return head(p) + lead + linksRow +
           (stats ? '<div class="hero__stats">' + stats + "</div>" : "") +
           epi +
           '<h2 class="section-label">' + esc(L.state.lang === "en" ? "Explore the report" : "瀏覽報告") + "</h2>" +

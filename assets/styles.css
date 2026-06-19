@@ -325,7 +325,15 @@ a { color:inherit; text-decoration:none; }
 .hero__stat-value, .stat-value, .tile__value, .lb-score, .lb-rank, .fc-progress, .quiz-num, .tag { font-family:var(--font-mono); }
 
 /* Hub hero: lead paragraph + epigraph + section label */
-.hero__lead { max-width:64ch; margin:18px 0 26px; font-size:1.12rem; line-height:1.7; color:var(--on-surface-variant); }
+.hero__lead { max-width:64ch; margin:18px 0 20px; font-size:1.12rem; line-height:1.7; color:var(--on-surface-variant); }
+.hero__actions { display:flex; flex-wrap:wrap; gap:12px; margin:0 0 28px; }
+.cta { display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:var(--radius-lg);
+  background:var(--primary); color:var(--on-primary); font-weight:600; font-size:.95rem; border:1px solid transparent;
+  transition:filter .15s,transform .15s,box-shadow .15s; }
+.cta:hover { filter:brightness(1.07); transform:translateY(-1px); box-shadow:var(--elev-2); }
+.cta:focus-visible { outline:2px solid var(--primary); outline-offset:3px; }
+.cta .material-symbols-rounded { font-size:20px; }
+.cta .cta__ext { font-size:15px; opacity:.75; }
 .section-label { margin:6px 0 14px; font-family:var(--font-mono); font-size:.8rem; font-weight:700;
   letter-spacing:.14em; text-transform:uppercase; color:var(--on-surface-variant); }
 .epigraph { margin:0 0 30px; padding:22px 26px; border-radius:var(--radius);
