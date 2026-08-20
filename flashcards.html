@@ -34,7 +34,9 @@
 </head>
 <body data-page="flashcards">
   <!-- shell.js injects the app bar, cross-page nav, footer and dialog around this -->
-  <main id="page"></main>
+  <main id="page">
+<header class="page-head"><p class="page-head__eyebrow">複習 · 字卡</p><h1>字卡</h1><p class="page-head__sub">點卡片翻面。逐張複習報告的核心概念。</p></header><div class="fc-stage" data-item=""><div class="fc-card" id="fcCard" role="button" tabindex="0" aria-label="字卡,點擊翻面"><div class="fc-faces"><div class="fc-face fc-front"><span class="fc-hint">詞</span><p class="fc-text" id="fcFront">AGI</p></div><div class="fc-face fc-back"><span class="fc-hint">義</span><p class="fc-text" id="fcBack">人類等級 AI —— 在多數認知任務上與一位中位水準人類同等能幹。</p></div></div></div><div class="fc-controls"><button class="btn-soft" id="fcPrev" type="button">上一張</button><span class="fc-progress" id="fcProgress" aria-live="polite">1 / 12</span><button class="btn-soft" id="fcNext" type="button">下一張</button></div><p class="fc-tip">點卡片翻面 · 方向鍵切換。</p></div>
+</main>
 
   <script src="data/data.js"></script>
   <script src="assets/shell.js"></script>

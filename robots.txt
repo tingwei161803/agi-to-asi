@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://agi-to-asi.peteraim.com/sitemap.xml
