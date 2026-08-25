@@ -5,6 +5,9 @@
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://agi-to-asi.peteraim.com/</loc>
+  </url>
+  <url>
     <loc>https://agi-to-asi.peteraim.com/advantages.html</loc>
   </url>
   <url>
@@ -17,6 +20,39 @@
     <loc>https://agi-to-asi.peteraim.com/concepts.html</loc>
   </url>
   <url>
+    <loc>https://agi-to-asi.peteraim.com/en/</loc>
+  </url>
+  <url>
+    <loc>https://agi-to-asi.peteraim.com/en/advantages.html</loc>
+  </url>
+  <url>
+    <loc>https://agi-to-asi.peteraim.com/en/agenda.html</loc>
+  </url>
+  <url>
+    <loc>https://agi-to-asi.peteraim.com/en/bottlenecks.html</loc>
+  </url>
+  <url>
+    <loc>https://agi-to-asi.peteraim.com/en/concepts.html</loc>
+  </url>
+  <url>
+    <loc>https://agi-to-asi.peteraim.com/en/flashcards.html</loc>
+  </url>
+  <url>
+    <loc>https://agi-to-asi.peteraim.com/en/glossary.html</loc>
+  </url>
+  <url>
+    <loc>https://agi-to-asi.peteraim.com/en/growth.html</loc>
+  </url>
+  <url>
+    <loc>https://agi-to-asi.peteraim.com/en/pathways.html</loc>
+  </url>
+  <url>
+    <loc>https://agi-to-asi.peteraim.com/en/quiz.html</loc>
+  </url>
+  <url>
+    <loc>https://agi-to-asi.peteraim.com/en/rsi.html</loc>
+  </url>
+  <url>
     <loc>https://agi-to-asi.peteraim.com/flashcards.html</loc>
   </url>
   <url>
@@ -24,9 +60,6 @@
   </url>
   <url>
     <loc>https://agi-to-asi.peteraim.com/growth.html</loc>
-  </url>
-  <url>
-    <loc>https://agi-to-asi.peteraim.com/</loc>
   </url>
   <url>
     <loc>https://agi-to-asi.peteraim.com/pathways.html</loc>
