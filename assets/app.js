@@ -352,7 +352,7 @@
         return head(p) +
           '<div class="fc-stage" data-item>' +
             '<div class="fc-card" id="fcCard" role="button" tabindex="0" ' +
-              'aria-label="' + (L.state.lang === "en" ? "Flashcard, tap to flip" : "字卡,點擊翻面") + '">' +
+              'aria-label="' + (L.state.lang === "en" ? "Flashcard, tap to flip" : "字卡，點擊翻面") + '">' +
               '<div class="fc-faces">' +
                 '<div class="fc-face fc-front"><span class="fc-hint">' + esc(hintFront) + '</span>' +
                   '<p class="fc-text" id="fcFront"></p></div>' +
@@ -740,7 +740,7 @@
           var done = Object.keys(answered).length;
           scoreEl.textContent = L.state.lang === "en"
             ? ("Score " + correct + " / " + total + (done === total ? " — done!" : " · " + done + " answered"))
-            : ("得分 " + correct + " / " + total + (done === total ? " —— 完成!" : " · 已作答 " + done));
+            : ("得分 " + correct + " / " + total + (done === total ? " —— 完成！" : " · 已作答 " + done));
         }
         updateScore();
         [].forEach.call(pageEl.querySelectorAll(".quiz-q"), function (qEl) {
