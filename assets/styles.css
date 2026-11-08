@@ -576,6 +576,11 @@ rect.bar-rect:last-of-type { fill:var(--amber); opacity:1; }
   .grid, .grid--pathways { grid-template-columns:1fr; }
   .grid--bottlenecks .card { grid-template-columns:1fr; row-gap:6px; padding-left:20px; }
   .grid--bottlenecks .card__tags { justify-content:flex-start; margin-top:4px; }
+  /* the weir shrinks to ~40% on a phone: thicken the bars, enlarge the labels */
+  .weir__bar rect { stroke:var(--cat); stroke-width:12px; }
+  .weir__bar text { font-size:40px; transform:translateY(22px); }
+  .weir__end { font-size:42px; transform:translateY(-8px); }
+  .weir svg { overflow:visible; margin-bottom:22px; }
   .grid--pathways .card { min-height:0; }
   .glossary { grid-template-columns:1fr; }
   .bento { grid-template-columns:1fr; }
