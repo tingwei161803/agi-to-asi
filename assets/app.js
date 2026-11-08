@@ -35,12 +35,123 @@
     var teardowns = [];   // observers / listeners to disconnect before each repaint
 
     /* ---------- shared bits ---------- */
+    /* page head: the paper's own section / table number hangs in the margin
+       beside every title, so each page stays anchored to its source */
     function head(p) {
       var eye = t(p.eyebrow)
         ? '<p class="page-head__eyebrow">' + esc(t(p.eyebrow)) + "</p>" : "";
       var sub = t(p.subtitle)
         ? '<p class="page-head__sub">' + esc(t(p.subtitle)) + "</p>" : "";
-      return '<header class="page-head">' + eye + "<h1>" + esc(t(p.title)) + "</h1>" + sub + "</header>";
+      var mark = p.mark ? '<span class="page-head__mark" aria-hidden="true">' + esc(p.mark) + "</span>" : "";
+      return '<header class="page-head' + (p.mark ? " page-head--marked" : "") + '">' + mark +
+        '<div class="page-head__text">' + eye + "<h1>" + esc(t(p.title)) + "</h1>" + sub + "</div></header>";
+    }
+
+    /* ---------- the intelligence spectrum (home hero) ----------
+       Drawn in a 1200×500 box that is stretched to fit (preserveAspectRatio
+       none); every stroke is non-scaling, star dots are zero-length round-cap
+       lines, and all text is HTML laid over it by percentage — so the figure
+       reflows to a squarer box on phones without squashing labels. */
+    var SPEC_W = 1200, SPEC_H = 500;
+    var SPEC_PATHS = {
+      scaling:    { d: "M140 400 C 520 396, 820 340, 1150 168", end: [1150, 168] },
+      paradigm:   { d: "M140 400 L 420 388 C 440 386, 444 332, 470 328 L 760 310 C 782 308, 788 240, 812 236 L 1150 216", end: [1150, 216] },
+      recursion:  { d: "M140 400 C 640 398, 860 380, 935 250 S 985 96, 1000 84", end: [1000, 84] },
+      multiagent: { d: ["M140 400 C 470 412, 760 348, 1150 264", "M140 400 C 450 388, 780 372, 1150 280", "M140 400 C 480 402, 740 352, 1150 272"], end: [1150, 272] }
+    };
+    function pct(x, y) { return "left:" + r(x / SPEC_W * 100) + "%;top:" + r(y / SPEC_H * 100) + "%"; }
+    function stars(n) {
+      var seed = 7, out = "";
+      function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+      for (var i = 0; i < n; i++) {
+        var x = r(20 + rnd() * 1160), y = r(10 + rnd() * 380), o = r(0.15 + rnd() * 0.6), w = rnd() > 0.9 ? 2.4 : 1.4;
+        out += '<path d="M' + x + " " + y + 'h0" stroke-width="' + w + '" opacity="' + o + '"/>';
+      }
+      return '<g class="spectrum__stars">' + out + "</g>";
+    }
+    function spectrum(spec) {
+      var NS = ' vector-effect="non-scaling-stroke"';
+      var curves = Object.keys(SPEC_PATHS).map(function (k) {
+        var d = SPEC_PATHS[k].d;
+        return (Array.isArray(d) ? d : [d]).map(function (dd) {
+          return '<path class="curve curve--' + k + '" d="' + dd + '"' + NS + "/>";
+        }).join("");
+      }).join("");
+      var svg = '<svg class="spectrum__svg" viewBox="0 0 ' + SPEC_W + " " + SPEC_H + '" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
+        "<defs>" +
+          '<linearGradient id="asiZone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--amber);stop-opacity:.02"/><stop offset="1" style="stop-color:var(--amber);stop-opacity:.14"/></linearGradient>' +
+          '<linearGradient id="horizon" gradientUnits="userSpaceOnUse" x1="60" y1="0" x2="1160" y2="0"><stop offset="0" style="stop-color:var(--amber);stop-opacity:.15"/><stop offset=".55" style="stop-color:var(--amber);stop-opacity:.9"/><stop offset="1" style="stop-color:var(--amber);stop-opacity:1"/></linearGradient>' +
+          '<clipPath id="sweep"><rect class="spectrum__sweep" x="0" y="0" width="' + SPEC_W + '" height="' + SPEC_H + '"/></clipPath>' +
+        "</defs>" +
+        stars(90) +
+        '<rect x="60" y="70" width="1100" height="180" fill="url(#asiZone)"/>' +
+        '<path class="spectrum__uai" d="M60 70 H1160"' + NS + "/>" +
+        '<path class="spectrum__horizon-glow" d="M60 250 H1160"' + NS + "/>" +
+        '<path class="spectrum__horizon" d="M60 250 H1160"' + NS + "/>" +
+        '<path class="spectrum__agi" d="M60 400 H1160"' + NS + "/>" +
+        '<path class="spectrum__axis" d="M60 30 V470 H1170"' + NS + "/>" +
+        '<g clip-path="url(#sweep)">' + curves + "</g>" +
+      "</svg>";
+      var labels =
+        '<span class="spec-label spec-label--uai" style="' + pct(72, 70) + '">' + esc(t(spec.uai)) + "</span>" +
+        '<span class="spec-label spec-label--asi" style="' + pct(72, 250) + '">' + esc(t(spec.asi)) + "</span>" +
+        '<span class="spec-label spec-label--agi" style="' + pct(140, 400) + '">' + esc(t(spec.agi)) + "</span>" +
+        '<span class="spec-label spec-label--y" style="' + pct(72, 30) + '">' + esc(t(spec.yAxis)) + "</span>" +
+        '<span class="spec-label spec-label--x" style="' + pct(1160, 470) + '">' + esc(t(spec.xAxis)) + "</span>" +
+        Object.keys(SPEC_PATHS).map(function (k) {
+          var e = SPEC_PATHS[k].end;
+          return '<a class="spec-path spec-path--' + k + '" style="' + pct(e[0], e[1]) + '" href="pathways.html#' + k + '">' +
+            esc(t(spec.paths[k])) + "</a>";
+        }).join("");
+      return '<figure class="spectrum"><div class="spectrum__plot">' + svg +
+        '<span class="spectrum__dot" style="' + pct(140, 400) + '" aria-hidden="true"></span>' + labels + "</div>" +
+        (t(spec.caption) ? '<figcaption class="spectrum__caption">' + esc(t(spec.caption)) + "</figcaption>" : "") +
+        "</figure>";
+    }
+
+    /* small glyph of each pathway's curve, reused on the pathways page */
+    function pathGlyph(k) {
+      var P = SPEC_PATHS[k]; if (!P) return "";
+      var ds = Array.isArray(P.d) ? P.d : [P.d];
+      return '<svg class="glyph glyph--' + k + '" viewBox="120 60 1050 360" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
+        '<path class="glyph__base" d="M130 400 H1160" vector-effect="non-scaling-stroke"/>' +
+        ds.map(function (d) { return '<path class="curve curve--' + k + '" d="' + d + '" vector-effect="non-scaling-stroke"/>'; }).join("") +
+        "</svg>";
+    }
+
+    /* one, two or three feedback loops — code, data, a society of agents */
+    function loopGlyph(key) {
+      var n = { geno: 1, meme: 2, socio: 3 }[key];
+      if (!n) return "";
+      var rings = [];
+      for (var i = 0; i < n; i++) {
+        var cx = 40 + (i - (n - 1) / 2) * 22;
+        rings.push('<path d="M' + r(cx + 13) + ' 24 A13 13 0 1 1 ' + r(cx + 4) + ' 11.6" />' +
+          '<path class="loop__head" d="M' + r(cx + 1) + ' 8 L' + r(cx + 6) + ' 11 L' + r(cx + 1.5) + ' 15" />');
+      }
+      return '<svg class="loop loop--' + key + '" viewBox="0 0 80 46" aria-hidden="true" focusable="false">' + rings.join("") + "</svg>";
+    }
+
+    /* the seven bottlenecks as a weir across the flow from AGI to ASI */
+    var CAT_ORDER = ["resource", "method", "external", "physical"];
+    function weir(p) {
+      var items = p.items || [], n = items.length || 1, W = 1000, H = 150;
+      var bars = items.map(function (it, i) {
+        var x = 110 + i * (780 / (n - 1 || 1)), h = 64;
+        return '<a href="#' + esc(it.slug) + '" class="weir__bar weir__bar--' + esc(it.category) + '">' +
+          "<title>" + esc(t(it.title)) + "</title>" +
+          '<rect x="' + r(x - 9) + '" y="' + r(75 - h / 2) + '" width="18" height="' + r(h) + '" rx="3"/>' +
+          '<text x="' + r(x) + '" y="' + r(75 + h / 2 + 22) + '" text-anchor="middle">' + (i + 1) + "</text></a>";
+      }).join("");
+      return '<figure class="weir" data-item><svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' +
+        esc(L.state.lang === "en" ? "Seven bottlenecks standing across the path from AGI to ASI" : "七個瓶頸橫跨在 AGI 通往 ASI 的路上") + '">' +
+        '<path class="weir__flow" d="M20 75 H980"/>' +
+        '<text class="weir__end" x="20" y="58">AGI</text><text class="weir__end" x="980" y="58" text-anchor="end">ASI</text>' +
+        bars + "</svg>" +
+        '<figcaption class="weir__key">' + CAT_ORDER.map(function (c) {
+          var cat = (p.categories || []).filter(function (x) { return x.key === c; })[0];
+          return cat ? '<span class="weir__k weir__k--' + c + '">' + esc(cat[L.state.lang] || cat.en) + "</span>" : "";
+        }).join("") + "</figcaption></figure>";
     }
 
     function barChart(series, accent) {
@@ -92,38 +203,50 @@
        ===================================================================== */
     var RENDERERS = {
 
-      /* ---- hub: hero stats + a card linking to every other page ---- */
+      /* ---- hub: night-sky hero with the intelligence spectrum, then a
+              table of contents that reads like the paper's own ---- */
       hub: function (p) {
-        var stats = (p.stats || []).map(function (s) {
-          return '<div class="hero__stat" data-item>' +
-            '<b class="hero__stat-value" data-count="' + esc(String(s.value)) + '">0</b>' +
-            '<span class="hero__stat-label">' + esc(t(s.label)) + "</span></div>";
+        var en = L.state.lang === "en";
+        var tally = (p.stats || []).map(function (st) {
+          return '<li><b>' + esc(String(st.value)) + "</b> " + esc(t(st.label)) + "</li>";
         }).join("");
-        var cards = L.pages.filter(function (q) { return q.slug !== "home"; }).map(function (q) {
-          return '<a class="card card--nav" data-item href="' + esc(L.pageHref(q)) + '" ' +
-              'aria-label="' + esc(t(q.title)) + '">' +
-            '<span class="material-symbols-rounded card__icon" aria-hidden="true">' + esc(q.icon || "label") + "</span>" +
-            '<h3 class="card__title">' + esc(t(q.title)) + "</h3>" +
-            '<p class="card__summary">' + esc(t(q.subtitle)) + "</p></a>";
-        }).join("");
-        var lead = t(p.lead) ? '<p class="hero__lead" data-item>' + esc(t(p.lead)) + "</p>" : "";
         var links = (p.links || []).map(function (lnk) {
-          return '<a class="cta" data-item href="' + esc(lnk.href) + '" target="_blank" rel="noopener">' +
-            '<span class="material-symbols-rounded" aria-hidden="true">' + esc(lnk.icon || "open_in_new") + "</span>" +
-            "<span>" + esc(t(lnk.label)) + "</span>" +
-            '<span class="material-symbols-rounded cta__ext" aria-hidden="true">open_in_new</span></a>';
+          return '<a class="hero__cta" href="' + esc(lnk.href) + '" target="_blank" rel="noopener">' +
+            esc(t(lnk.label)) + '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M5 11L11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>';
         }).join("");
-        var linksRow = links ? '<div class="hero__actions">' + links + "</div>" : "";
+        var entry = function (q) {
+          return '<li><a class="contents__link" href="' + esc(L.pageHref(q)) + '">' +
+            '<span class="contents__mark" aria-hidden="true">' + esc(q.mark || "") + "</span>" +
+            '<span class="contents__body"><span class="contents__title">' + esc(t(q.title)) + "</span>" +
+            '<span class="contents__sum">' + esc(t(q.subtitle)) + "</span></span></a></li>";
+        };
+        var report = L.pages.filter(function (q) { return q.slug !== "home" && q.group !== "study"; }).map(entry).join("");
+        var study = L.pages.filter(function (q) { return q.group === "study"; }).map(entry).join("");
         var epi = "";
         if (p.epigraph && t(p.epigraph.text)) {
-          epi = '<figure class="epigraph" data-item><blockquote>' + esc(t(p.epigraph.text)) + "</blockquote>" +
-            (t(p.epigraph.cite) ? '<figcaption>' + esc(t(p.epigraph.cite)) + "</figcaption>" : "") + "</figure>";
+          epi = '<figure class="epigraph"><blockquote>' + esc(t(p.epigraph.text)) + "</blockquote>" +
+            (t(p.epigraph.cite) ? "<figcaption>" + esc(t(p.epigraph.cite)) + "</figcaption>" : "") + "</figure>";
         }
-        return head(p) + lead + linksRow +
-          (stats ? '<div class="hero__stats">' + stats + "</div>" : "") +
-          epi +
-          '<h2 class="section-label">' + esc(L.state.lang === "en" ? "Explore the report" : "瀏覽報告") + "</h2>" +
-          '<div class="grid">' + cards + "</div>";
+        return '<section class="hero">' +
+            '<div class="wrap hero__head">' +
+              (t(p.eyebrow) ? '<p class="hero__source">' + esc(t(p.eyebrow)) + "</p>" : "") +
+              '<h1 class="hero__title">' + esc(t(p.title)) + "</h1>" +
+              (t(p.subtitle) ? '<p class="hero__sub">' + esc(t(p.subtitle)) + "</p>" : "") +
+            "</div>" +
+            '<div class="wrap">' + (p.spectrum ? spectrum(p.spectrum) : "") + "</div>" +
+            '<div class="wrap hero__foot">' +
+              (tally ? '<ul class="tally">' + tally + "</ul>" : "") + links +
+            "</div>" +
+          "</section>" +
+          '<section class="wrap intro">' +
+            (t(p.lead) ? '<p class="intro__lead">' + esc(t(p.lead)) + "</p>" : "") + epi +
+          "</section>" +
+          '<section class="wrap contents" aria-labelledby="contentsH">' +
+            '<h2 id="contentsH" class="contents__h">' + esc(en ? "Inside the report" : "報告內容") + "</h2>" +
+            '<ol class="contents__list">' + report + "</ol>" +
+            '<h2 class="contents__h contents__h--study">' + esc(en ? "Study tools" : "複習工具") + "</h2>" +
+            '<ol class="contents__list contents__list--study">' + study + "</ol>" +
+          "</section>";
       },
 
       /* ---- gallery: search + chips + card grid + dialog ---- */
@@ -133,7 +256,7 @@
             esc(c[L.state.lang] || c.en) + "</button>";
         }).join("");
         var allLabel = L.state.lang === "en" ? "All" : "全部";
-        return head(p) +
+        return head(p) + (p.categories ? weir(p) : "") +
           '<div class="toolbar">' +
             '<input id="search" class="search" type="search" autocomplete="off" ' +
               'placeholder="' + (L.state.lang === "en" ? "Search…" : "搜尋…") + '" ' +
@@ -141,7 +264,7 @@
             (cats ? '<div class="chips"><button class="chip chip--active" type="button" data-cat="">' + esc(allLabel) + "</button>" + cats + "</div>" : "") +
           "</div>" +
           '<p class="result-count" id="resultCount" aria-live="polite"></p>' +
-          '<div class="grid" id="grid"></div>';
+          '<div class="grid grid--' + esc(p.slug) + '" id="grid"></div>';
       },
 
       /* ---- article: sticky TOC + prose + reading progress ---- */
@@ -232,7 +355,6 @@
       bento: function (p) {
         var tiles = (p.tiles || []).map(function (tile) {
           return '<article class="tile tile--' + esc(tile.size || "sm") + (tile.accent ? " tile--accent" : "") + '" data-item>' +
-            (tile.icon ? '<span class="material-symbols-rounded tile__icon" aria-hidden="true">' + esc(tile.icon) + "</span>" : "") +
             (t(tile.value) ? '<b class="tile__value">' + esc(t(tile.value)) + "</b>" : "") +
             '<h3 class="tile__title">' + esc(t(tile.title)) + "</h3>" +
             (t(tile.body) ? '<p class="tile__body">' + esc(t(tile.body)) + "</p>" : "") + "</article>";
@@ -277,6 +399,7 @@
         var plans = p.plans || [], feats = p.features || [];
         var thead = '<th scope="col"></th>' + plans.map(function (pl) {
           return '<th scope="col" class="' + (pl.highlight ? "cmp-col--hl" : "") + '">' +
+            loopGlyph(pl.key) +
             '<div class="cmp-plan">' + esc(t(pl.name)) + "</div>" +
             '<div class="cmp-price">' + esc(t(pl.price)) + "</div>" +
             (t(pl.note) ? '<div class="cmp-note">' + esc(t(pl.note)) + "</div>" : "") + "</th>";
@@ -352,7 +475,7 @@
         return head(p) +
           '<div class="fc-stage" data-item>' +
             '<div class="fc-card" id="fcCard" role="button" tabindex="0" ' +
-              'aria-label="' + (L.state.lang === "en" ? "Flashcard, tap to flip" : "字卡,點擊翻面") + '">' +
+              'aria-label="' + (L.state.lang === "en" ? "Flashcard, tap to flip" : "字卡，點擊翻面") + '">' +
               '<div class="fc-faces">' +
                 '<div class="fc-face fc-front"><span class="fc-hint">' + esc(hintFront) + '</span>' +
                   '<p class="fc-text" id="fcFront"></p></div>' +
@@ -365,7 +488,7 @@
               '<span class="fc-progress" id="fcProgress" aria-live="polite"></span>' +
               '<button class="btn-soft" id="fcNext" type="button">' + esc(L.state.lang === "en" ? "Next" : "下一張") + "</button>" +
             "</div>" +
-            '<p class="fc-tip">' + esc(L.state.lang === "en" ? "Tap the card to flip · arrow keys to navigate." : "點卡片翻面 · 方向鍵切換。") + "</p>" +
+            '<p class="fc-tip">' + esc(L.state.lang === "en" ? "Tap the card to flip it. Use the arrow keys to move between cards." : "點卡片翻面，用方向鍵切換上下張。") + "</p>" +
           "</div>";
       },
 
@@ -392,7 +515,7 @@
        WIRING (interactions) — keyed by layout, run after innerHTML is set
        ===================================================================== */
     var WIRE = {
-      hub: function () { animateCounters(); },
+      hub: function () { /* static; the only motion is the CSS curve sweep */ },
 
       gallery: function (p) {
         var grid = document.getElementById("grid");
@@ -411,8 +534,13 @@
           var rows = (p.items || []).filter(matches);
           grid.innerHTML = rows.map(function (item) {
             var tags = (item.tags || []).map(function (g) { return '<span class="tag">' + esc(g) + "</span>"; }).join("");
-            return '<article class="card" tabindex="0" role="button" data-item data-slug="' + esc(item.slug) + '" ' +
+            var idx = (p.items || []).indexOf(item) + 1;
+            var cat = item.category ? (p.categories || []).filter(function (c) { return c.key === item.category; })[0] : null;
+            return '<article class="card' + (item.category ? " card--" + esc(item.category) : "") + '" tabindex="0" role="button" data-item data-slug="' + esc(item.slug) + '" ' +
               'aria-label="' + esc(t(item.title)) + '">' +
+              (SPEC_PATHS[item.slug] ? pathGlyph(item.slug) : "") +
+              '<span class="card__num" aria-hidden="true">' + idx + "</span>" +
+              (cat ? '<span class="card__cat">' + esc(cat[L.state.lang] || cat.en) + "</span>" : "") +
               '<h3 class="card__title">' + esc(t(item.title)) + "</h3>" +
               '<p class="card__summary">' + esc(t(item.summary)) + "</p>" +
               (tags ? '<div class="card__tags">' + tags + "</div>" : "") + "</article>";
@@ -740,7 +868,7 @@
           var done = Object.keys(answered).length;
           scoreEl.textContent = L.state.lang === "en"
             ? ("Score " + correct + " / " + total + (done === total ? " — done!" : " · " + done + " answered"))
-            : ("得分 " + correct + " / " + total + (done === total ? " —— 完成!" : " · 已作答 " + done));
+            : ("得分 " + correct + " / " + total + (done === total ? " —— 完成！" : " · 已作答 " + done));
         }
         updateScore();
         [].forEach.call(pageEl.querySelectorAll(".quiz-q"), function (qEl) {
@@ -766,28 +894,6 @@
         });
       }
     };
-
-    /* ---- hero count-up (shared by hub) ---- */
-    function animateCounters() {
-      var els = [].slice.call(pageEl.querySelectorAll(".hero__stat-value[data-count]"));
-      if (!els.length) return;
-      function run(el) {
-        var target = parseFloat(el.dataset.count) || 0, dur = 1000, start = null;
-        function step(ts) {
-          if (start === null) start = ts;
-          var pr = Math.min(1, (ts - start) / dur), eased = 1 - Math.pow(1 - pr, 3);
-          el.textContent = String(Math.round(target * eased));
-          if (pr < 1) requestAnimationFrame(step); else el.textContent = String(target);
-        }
-        requestAnimationFrame(step);
-      }
-      if (!("IntersectionObserver" in window)) { els.forEach(run); return; }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { if (en.isIntersecting) { run(en.target); io.unobserve(en.target); } });
-      }, { threshold: 0.4 });
-      els.forEach(function (el) { io.observe(el); });
-      teardowns.push(function () { io.disconnect(); });
-    }
 
     /* =====================================================================
        RENDER the current page

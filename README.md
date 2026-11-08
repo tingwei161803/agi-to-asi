@@ -20,7 +20,7 @@
 ## ✨ 功能特色
 
 - 🌏 **一個語言一個網址** — 中文在 root、English 在 `/en/`,兩邊都是完整的靜態頁面;右上角的切換鈕是連結,會帶你到同一頁的另一語言版本
-- 🌗 **深色 / 淺色模式** — 手動切換,並記憶你的選擇
+- 🌗 **深色 / 淺色模式** — 預設跟隨作業系統設定;手動切換後會記住你的選擇
 - 🧭 **多頁面導覽** — 11 個主題各有獨立 URL(兩種語言共 22 個),共用同一套導覽列與主題
 - 🔍 **即時搜尋** — 路徑、瓶頸、詞彙表都可輸入關鍵字立即過濾
 - 🏷️ **分類篩選** — 瓶頸頁可依類型(資源 / 方法 / 外部 / 物理)篩選
@@ -38,7 +38,7 @@
 
 ```
 agi-to-asi/
-├── index.html            # 首頁(hub:總覽 + 入口卡)
+├── index.html            # 首頁(智慧光譜圖 + 報告目錄)
 ├── concepts.html         # 定義:AGI / ASI / UAI(article)
 ├── advantages.html       # 數位心智的優勢(bento)
 ├── growth.html           # 成長動態(dashboard)
@@ -53,7 +53,7 @@ agi-to-asi/
 ├── assets/
 │   ├── shell.js          # 共用 chrome:appbar / 跨頁導覽 / footer / dialog
 │   ├── app.js            # 版型引擎(依 data-page 選 renderer 渲染)
-│   └── styles.css        # Material Design 3 + 極簡編輯 / 科技風樣式
+│   └── styles.css        # 「事件視界」設計:夜空底、琥珀色曲線、論文章節編號
 ├── data/
 │   └── data.js           # 唯一資料層(SITE_META + SITE_PAGES,雙語 {en,zh})
 ├── 2606.12683v1.pdf      # 原始論文 PDF
