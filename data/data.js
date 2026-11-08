@@ -22,6 +22,7 @@ window.SITE_PAGES = [
   /* ===================== HOME · hub ===================== */
   {
     slug: "home", layout: "hub", icon: "rocket_launch",
+    nav: { en: "Home", zh: "首頁" },
     eyebrow: { en: "Google DeepMind · arXiv 2606.12683", zh: "Google DeepMind · arXiv 2606.12683" },
     title:    { en: "From AGI to ASI", zh: "從 AGI 到 ASI" },
     subtitle: { en: "What happens after human-level AGI? This report maps the continuum of machine intelligence beyond AGI — four technological pathways toward superintelligence, the frictions that could slow or halt them, and the research questions they raise.",
@@ -38,6 +39,21 @@ window.SITE_PAGES = [
       { href: "https://arxiv.org/abs/2606.12683", icon: "article",
         label: { en: "Read the paper on arXiv", zh: "在 arXiv 閱讀原文" } }
     ],
+    spectrum: {
+      caption: { en: "A schematic, not a forecast: four pathways rising from human-level AGI toward the incomputable limit of Universal AI. Tap a pathway to read about it.",
+                 zh: "這是示意圖，不是預測：四條路徑從人類等級 AGI 出發，朝不可計算的通用人工智慧極限上升。點選路徑名稱可看說明。" },
+      yAxis: { en: "Intelligence (Legg-Hutter score)", zh: "智慧（Legg-Hutter 分數）" },
+      xAxis: { en: "Time after AGI", zh: "抵達 AGI 之後" },
+      agi:   { en: "AGI, human level", zh: "AGI：人類等級" },
+      asi:   { en: "ASI: beyond large expert collectives", zh: "ASI：超越大型人類專家集體" },
+      uai:   { en: "UAI: the incomputable limit", zh: "UAI：不可計算的理論極限" },
+      paths: {
+        scaling:    { en: "Scaling", zh: "擴張" },
+        paradigm:   { en: "Paradigm shifts", zh: "範式轉移" },
+        recursion:  { en: "Self-improvement", zh: "遞迴自我改進" },
+        multiagent: { en: "Group agency", zh: "多代理群體" }
+      }
+    },
     stats: [
       { value: 4,  label: { en: "Pathways to ASI", zh: "通往 ASI 的路徑" } },
       { value: 7,  label: { en: "Potential bottlenecks", zh: "潛在瓶頸" } },
@@ -49,6 +65,7 @@ window.SITE_PAGES = [
   /* ===================== CONCEPTS · article ===================== */
   {
     slug: "concepts", layout: "article", icon: "psychology",
+    nav: { en: "Definitions", zh: "定義" }, mark: "3–4",
     eyebrow: { en: "Sections 3–4 · Characterizing ASI", zh: "第 3–4 章 · 定義超智慧" },
     title:    { en: "What counts as superintelligence?", zh: "什麼才算超智慧？" },
     subtitle: { en: "AGI, ASI and the theoretical endpoint of Universal AI — and why intelligence is best treated as a continuum.",
@@ -112,6 +129,7 @@ window.SITE_PAGES = [
   /* ===================== ADVANTAGES · bento ===================== */
   {
     slug: "advantages", layout: "bento", icon: "memory",
+    nav: { en: "Advantages", zh: "數位優勢" }, mark: "T1",
     eyebrow: { en: "Table 1 · Digital intelligence", zh: "表 1 · 數位智慧" },
     title:    { en: "Advantages of a digital mind", zh: "數位心智的優勢" },
     subtitle: { en: "Properties of digital intelligence that scale with compute and hardware in ways biology cannot — widening the human–AI gap as computers grow more powerful.",
@@ -145,6 +163,7 @@ window.SITE_PAGES = [
   /* ===================== GROWTH · dashboard ===================== */
   {
     slug: "growth", layout: "dashboard", icon: "trending_up",
+    nav: { en: "Growth", zh: "成長速度" }, mark: "5.1",
     eyebrow: { en: "Section 5.1 · Growth dynamics", zh: "第 5.1 章 · 成長動態" },
     title:    { en: "How fast could capability grow?", zh: "能力可能成長多快？" },
     subtitle: { en: "Effective compute has grown roughly an order of magnitude per year — the product of better hardware, more investment, and more efficient algorithms. Whether that translates into genuinely new capabilities is the open question.",
@@ -182,6 +201,7 @@ window.SITE_PAGES = [
   /* ===================== PATHWAYS · gallery ===================== */
   {
     slug: "pathways", layout: "gallery", icon: "alt_route",
+    nav: { en: "Pathways", zh: "四條路徑" }, mark: "5",
     eyebrow: { en: "Table 3 · Section 5", zh: "表 3 · 第 5 章" },
     title:    { en: "Four pathways from AGI to ASI", zh: "從 AGI 到 ASI 的四條路徑" },
     subtitle: { en: "Four routes by which AI might move from human-level to superintelligence. They are not mutually exclusive and may unfold in parallel. Tap a card for detail.",
@@ -213,6 +233,7 @@ window.SITE_PAGES = [
   /* ===================== RSI · comparison ===================== */
   {
     slug: "rsi", layout: "comparison", icon: "autorenew",
+    nav: { en: "Self-improvement", zh: "自我改進" }, mark: "5.3",
     eyebrow: { en: "Section 5.3 · A taxonomy", zh: "第 5.3 章 · 一套分類" },
     title:    { en: "Three flavours of recursive self-improvement", zh: "遞迴自我改進的三種型態" },
     subtitle: { en: "The report maps self-improvement onto three processes drawn from human evolution.", zh: "報告把自我改進對應到取自人類演化的三種歷程。" },
@@ -244,6 +265,7 @@ window.SITE_PAGES = [
   /* ===================== BOTTLENECKS · gallery ===================== */
   {
     slug: "bottlenecks", layout: "gallery", icon: "block",
+    nav: { en: "Bottlenecks", zh: "瓶頸" }, mark: "5.5",
     eyebrow: { en: "Table 4 · Section 5.5", zh: "表 4 · 第 5.5 章" },
     title:    { en: "Seven bottlenecks on the way", zh: "路上的七大瓶頸" },
     subtitle: { en: "Frictions that could slow or halt progress along the pathways. Whether each is negligible or decisive is itself an open research question. Filter by type, or tap for detail.",
@@ -289,6 +311,7 @@ window.SITE_PAGES = [
   /* ===================== AGENDA · kanban ===================== */
   {
     slug: "agenda", layout: "kanban", icon: "science",
+    nav: { en: "Agenda", zh: "研究議程" }, mark: "7.1",
     eyebrow: { en: "Section 7.1 · Research agenda", zh: "第 7.1 章 · 研究議程" },
     title:    { en: "Plenty that needs to be done", zh: "還有許多待完成的事" },
     subtitle: { en: "Open research questions the report leaves for the field, grouped by theme.", zh: "報告留給整個領域的開放研究問題，依主題分組。" },
@@ -323,6 +346,7 @@ window.SITE_PAGES = [
   /* ===================== GLOSSARY · custom ===================== */
   {
     slug: "glossary", layout: "glossary", icon: "menu_book",
+    nav: { en: "Glossary", zh: "詞彙表" }, group: "study", mark: "B",
     eyebrow: { en: "Appendix B · Glossary", zh: "附錄 B · 詞彙表" },
     title:    { en: "Glossary", zh: "詞彙表" },
     subtitle: { en: "Key terms used in the report. Type to filter.", zh: "報告中用到的關鍵術語。可輸入關鍵字篩選。" },
@@ -377,6 +401,7 @@ window.SITE_PAGES = [
   /* ===================== FLASHCARDS · custom ===================== */
   {
     slug: "flashcards", layout: "flashcards", icon: "style",
+    nav: { en: "Flashcards", zh: "字卡" }, group: "study",
     eyebrow: { en: "Study · Flashcards", zh: "複習 · 字卡" },
     title:    { en: "Flashcards", zh: "字卡" },
     subtitle: { en: "Tap a card to flip. Step through the core ideas of the report.", zh: "點卡片翻面。逐張複習報告的核心概念。" },
@@ -411,6 +436,7 @@ window.SITE_PAGES = [
   /* ===================== QUIZ · custom ===================== */
   {
     slug: "quiz", layout: "quiz", icon: "quiz",
+    nav: { en: "Quiz", zh: "測驗" }, group: "study",
     eyebrow: { en: "Check · Quiz", zh: "測驗 · 隨堂" },
     title:    { en: "Quick comprehension check", zh: "快速理解測驗" },
     subtitle: { en: "Seven questions on the report's core ideas. Instant feedback; your score lives only in this session.", zh: "七道關於報告核心概念的題目。即時回饋；分數只存在於本次瀏覽。" },
